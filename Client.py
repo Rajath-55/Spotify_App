@@ -4,6 +4,7 @@ import requests
 import json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import RedditClient
 import os
 
 # Initial client generation
@@ -59,7 +60,7 @@ class SpotifyClient():
         playlists = self.sp.user_playlists(username)
 
 
-    def makePlayListwithSongs(self, path_to_dir, name):
+    def makePlayListwithDir(self, path_to_dir, name):
         curdir = os.chdir(path_to_dir)
         f = []
         for(dirpath, dirnames, filenames) in os.walk(os.curdir):
@@ -74,8 +75,22 @@ class SpotifyClient():
         track_ids = self.GetTrackIDs(names)
         self.addToPlaylist(self.username,track_ids, name)
 
+    def listenToThis(self):
+        rclient = RedditClient.RedditClient()
+        songlist = rclient.getHot('listentothis', 20)
+        new_list = list(songlist)
+        self.makePlaylistwithSongs(new_list, 'r/listentothis')
+
+    def makePlaylistwithSongs(self, song_list, name):
+        self.makePlayList(name)
+        track_ids = self.GetTrackIDs(song_list)
+        self.addToPlaylist(self.username, track_ids, name)   
+           
+
 
 if __name__ == "__main__":
     client = SpotifyClient()
+    
+
     
     
