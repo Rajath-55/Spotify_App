@@ -11,9 +11,11 @@ class RedditClient():
     
     def getHot(self, subreddit, limit=10):
         hot_posts = self.reddit.subreddit(subreddit).hot(limit=limit)
+        titles = []
         for post in hot_posts:
-            print(post.title)
-        return hot_posts
+            # print(post.title)
+            titles.append(post.title)
+        return hot_posts, titles
 
         
 
